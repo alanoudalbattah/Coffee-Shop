@@ -7,12 +7,11 @@ This is the Full-stack nanodegree program 3rd project, The project's objective i
 * Applying software system risk and compliance principles
 
 ## What Will I Build?
-A full stack drink menu application. The application must:
-* Display graphics representing the ratios of ingredients in each drink.
-* Allow public users to view drink names and graphics.
-* Allow the shop baristas to see the recipe information.
-* Allow the shop managers to create new drinks and edit existing drinks.
+A full stack drink menu application, see more details [here](./Coffee_Shop/README.md).
 
 ## Getting Started
+You can follow instructions specified in:
+1. [`./Coffee_Shop/backend/`](./Coffee_Shop/backend/README.md)
+2. [`./Coffee_Shop/frontend/`](./Coffee_Shop/frontend/README.md)
 
 ## Examples 
