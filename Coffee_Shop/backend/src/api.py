@@ -17,7 +17,7 @@ CORS(app)
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 !! Running this funciton will add one
 '''
-# db_drop_and_create_all()
+#db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -28,6 +28,17 @@ CORS(app)
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
+@app.route('/')
+def drinks():
+    try:
+        return jsonify({
+        'success': True,
+        'drinks': [drinks.short() for drinks in Drink.query.all()]
+        }), 200
+    except:
+        #just to test error handling
+        raise AuthError({'message':'something'}, 403)
+
 
 
 '''
@@ -80,8 +91,6 @@ CORS(app)
 '''
 Example error handling for unprocessable entity
 '''
-
-
 @app.errorhandler(422)
 def unprocessable(error):
     return jsonify({
@@ -89,7 +98,6 @@ def unprocessable(error):
         "error": 422,
         "message": "unprocessable"
     }), 422
-
 
 '''
 ✅@TODO implement error handlers using the @app.errorhandler(error) decorator
@@ -101,7 +109,6 @@ def unprocessable(error):
                     }), 404
 
 '''
-
 '''
 ✅@TODO implement error handler for 404
     error handler should conform to general task above
@@ -118,19 +125,12 @@ def unprocessable(error):
 ✅@TODO implement error handler for AuthError
     error handler should conform to general task above
 '''
-@app.errorhandler(401)
-def unprocessable(error):
+@app.errorhandler(AuthError)
+def unprocessable(err):
     return jsonify({
         "success": False,
-        "error": 401,
-        "message": "unauthorized"
-    }), 401
+        "error": err.status_code,
+        "message": err.error.get('message'),
+    }), err.status_code
 
-@app.errorhandler(403)
-def unprocessable(error):
-    return jsonify({
-        "success": False,
-        "error": 403,
-        "message": "forbidden"
-    }), 403
-
+#src: https://auth0.com/docs/quickstart/backend/python/01-authorization

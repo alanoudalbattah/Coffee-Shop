@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd src
+
 source env/scripts/activate
 
 export FLASK_APP=api.py
