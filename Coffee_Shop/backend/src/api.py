@@ -17,7 +17,7 @@ CORS(app)
 !! NOTE THIS MUST BE UNCOMMENTED ON FIRST RUN
 !! Running this funciton will add one
 '''
-#db_drop_and_create_all()
+db_drop_and_create_all()
 
 # ROUTES
 '''
@@ -36,9 +36,7 @@ def drinks():
         'drinks': [drinks.short() for drinks in Drink.query.all()]
         }), 200
     except:
-        #just to test error handling
-        raise AuthError({'message':'something'}, 403)
-
+        abort(422)
 
 
 '''
@@ -49,7 +47,7 @@ def drinks():
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
-
+        #raise AuthError({'message':'something'}, 403)
 
 '''
 @TODO implement endpoint
