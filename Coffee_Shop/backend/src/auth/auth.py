@@ -37,17 +37,17 @@ def get_token_auth_header():
 
     #* raise an AuthError if no header is present
     if not auth_header:
-        raise AuthError({'message': 'Authorization header not found'}, 401)
+        raise AuthError({'description': 'Authorization header not found'}, 401)
 
     #* attempt to split bearer and the token
     auth_header_parts = auth_header.split()
 
     #* raise an AuthError if the header is malformed
     if auth_header_parts[0].lower() != 'bearer':
-        raise AuthError({'message': 'Authorization header must start with "Bearer"'}, 401)
+        raise AuthError({'description': 'Authorization header must start with "Bearer"'}, 401)
 
     elif len(auth_header_parts) != 2:
-        raise AuthError({'message': 'Authorization header format is invalid'}, 401)
+        raise AuthError({'description': 'Authorization header format is invalid'}, 401)
 
     #* return the token part of the header
     return auth_header_parts[1] 
