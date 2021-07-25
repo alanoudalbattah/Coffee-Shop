@@ -58,7 +58,8 @@ def drinks_details(payload):# <-- must take 1 postional args
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
 def create_drinks(payload):   
-    title = request.get_json()['title'], recipe = request.get_json()['recipe'] # fetch values from request body 
+    title = request.get_json()['title']
+    recipe = request.get_json()['recipe'] # fetch values from request body 
 
     if type(recipe) != type([]): # in case recipe is not an array
         abort(400,  description='recipe must be an array')
@@ -70,7 +71,7 @@ def create_drinks(payload):
         new_drink.insert()
     except:
         # since we already checked recipe the only possible error left is title not unique
-        abort(400, {'description': 'title must be unique'})
+        abort(400, description='title must be unique')
     
     return jsonify({ 'success': True, 'drinks': [new_drink.long()] }), 200
 
@@ -88,9 +89,12 @@ def create_drinks(payload):
 @app.route('/drinks/<int:_id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def update_drinks(payload, _id):
-    title = request.get_json()['title'], recipe = request.get_json()['recipe'] # fetch values from request body 
 
     updated_drink = Drink.query.get_or_404(_id)
+
+    title = request.get_json()['title']
+    recipe = request.get_json()['recipe'] # fetch values from request body 
+
     
     if type(recipe) != type([]): # in case recipe is not an array
          abort(400,  description='recipe must be an array')
@@ -127,11 +131,11 @@ def delete_drinks(payload, _id):
 Example error handling for unprocessable entity
 '''
 @app.errorhandler(422)
-def unprocessable(error):
+def unprocessable(err):
     return jsonify({
         "success": False,
         "error": 422,
-        "message": "unprocessable"
+        "message": err.description
     }), 422
 
 '''
@@ -153,7 +157,7 @@ def unprocessable(err):
     return jsonify({
         "success": False,
         "error": 404,
-        "message": "resource not found"
+        "message": err.description
     }), 404
 
 @app.errorhandler(400)
