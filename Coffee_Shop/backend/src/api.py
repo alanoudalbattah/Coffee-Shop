@@ -88,7 +88,9 @@ def update_drinks(payload, _id):
 @app.route('/drinks/<_id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drinks(payload, _id):
-    return jsonify({ 'success': True, 'drinks': 0 }), 200
+    # delete the resourse using the delete mothod in models.py and if the resourse is not found throw a 404 error ...
+    #? i added a return statement to "delete method" in models.py to make sure the right resource is deleted :)
+    return jsonify({ 'success': True, 'delete': (Drink.query.get_or_404(_id).delete()).get('id') }), 200
 
 
 # Error Handling
