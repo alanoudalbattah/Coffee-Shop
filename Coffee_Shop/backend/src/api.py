@@ -3,6 +3,7 @@ from flask import Flask, request, jsonify, abort
 from sqlalchemy import exc
 import json
 from flask_cors import CORS
+from sqlalchemy.sql.elements import Null
 
 from .database.models import db_drop_and_create_all, setup_db, Drink
 from .auth.auth import AuthError, requires_auth
@@ -56,13 +57,25 @@ def drinks_details(payload):# <-- must take 1 postional args
 '''
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
-def create_drinks(payload):
-    new_drink = Drink( title=request.get_json()['title'] , recipe=json.dumps(request.get_json()['recipe'])) #? (json.dumps) serialize object to JSON formatted string
-    new_drink.insert()
+def create_drinks(payload):   
+    title = request.get_json()['title'], recipe = request.get_json()['recipe'] # fetch values from request body 
+
+    if type(recipe) != type([]): # in case recipe is not an array
+        abort(400,  description='recipe must be an array')
+        # using custom abort message src: https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/
+        
+    new_drink = Drink( title=title , recipe=json.dumps(recipe)) #? (json.dumps) serialize object to JSON formatted string
+    
+    try:
+        new_drink.insert()
+    except:
+        # since we already checked recipe the only possible error left is title not unique
+        abort(400, {'description': 'title must be unique'})
+    
     return jsonify({ 'success': True, 'drinks': [new_drink.long()] }), 200
 
 '''
-@TODO implement endpoint
+✅@TODO implement endpoint
     PATCH /drinks/<id>
         where <id> is the existing model id
         it should respond with a 404 error if <id> is not found
@@ -75,7 +88,22 @@ def create_drinks(payload):
 @app.route('/drinks/<int:_id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def update_drinks(payload, _id):
-    return jsonify({ 'success': True, 'drinks': [drinks.long() for drinks in Drink.query.all()] }), 200
+    title = request.get_json()['title'], recipe = request.get_json()['recipe'] # fetch values from request body 
+
+    updated_drink = Drink.query.get_or_404(_id)
+    
+    if type(recipe) != type([]): # in case recipe is not an array
+         abort(400,  description='recipe must be an array')
+
+    updated_drink.title = title 
+    updated_drink.recipe = json.dumps(recipe)
+    
+    try:
+        updated_drink.update()
+    except:
+        abort(400, description='title must be unique') # in case title is not unique
+
+    return jsonify({ 'success': True, 'drinks': [updated_drink.long()]}), 200
 
 '''
 ✅@TODO implement endpoint
@@ -90,7 +118,6 @@ def update_drinks(payload, _id):
 @app.route('/drinks/<int:_id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drinks(payload, _id):
-    # delete the resourse using the delete mothod in models.py and if the resourse is not found throw a 404 error ...
     #? i added a return statement to "delete method" in models.py to make sure the right resource is deleted :)
     return jsonify({ 'success': True, 'delete': (Drink.query.get_or_404(_id).delete()).get('id') }), 200
 
@@ -122,12 +149,20 @@ def unprocessable(error):
     error handler should conform to general task above
 '''
 @app.errorhandler(404)
-def unprocessable(error):
+def unprocessable(err):
     return jsonify({
         "success": False,
         "error": 404,
         "message": "resource not found"
     }), 404
+
+@app.errorhandler(400)
+def unprocessable(err):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": err.description
+    }), 400
 
 '''
 ✅@TODO implement error handler for AuthError
