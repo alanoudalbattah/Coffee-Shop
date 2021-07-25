@@ -29,29 +29,11 @@ db_drop_and_create_all()
         or appropriate status code indicating reason for failure
 '''
 @app.route('/drinks', methods=['GET'])
-def drinks():
-    try:
-        return jsonify({
-        'success': True,
-        'drinks': [drinks.short() for drinks in Drink.query.all()]
-        }), 200
-    except:
-        # dose 422 ever occur here?
-        #  i decided to not handle this error here because the semanticlly
-        #  wrong request comming from the client whould not matter
+def drinks(): return jsonify({ 'success': True, 'drinks': [drinks.short() for drinks in Drink.query.all()]}), 200
 
-        # if the request is sentactily wrong 400 whould be thrown 
-        # automaticlly no need to handle it 
-
-        # the only error i can think of here is 404 in case the db dosent
-        # have any records which should never happen
-        if not Drink.query.all():
-            abort(404)
-
-        # else 500 for db error  
 
 '''
-@TODO implement endpoint
+✅@TODO implement endpoint
     GET /drinks-detail
         it should require the 'get:drinks-detail' permission
         it should contain the drink.long() data representation
@@ -61,10 +43,7 @@ def drinks():
 @app.route('/drinks-detail', methods=['GET'])
 @requires_auth('get:drinks-detail')
 def drinks_details(payload):# <-- must take 1 postional args
-        return jsonify({
-        'success': True,
-        'drinks': [drinks.long() for drinks in Drink.query.all()]
-        }), 200
+    return jsonify({ 'success': True, 'drinks': [drinks.long() for drinks in Drink.query.all()] }), 200
 
 '''
 @TODO implement endpoint
@@ -75,7 +54,10 @@ def drinks_details(payload):# <-- must take 1 postional args
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the newly created drink
         or appropriate status code indicating reason for failure
 '''
-
+@app.route('/drinks', methods=['POST'])
+@requires_auth('post:drinks')
+def create_drinks(payload):
+    return jsonify({ 'success': True, 'drinks': [drinks.long() for drinks in Drink.query.all()] }), 200
 
 '''
 @TODO implement endpoint
@@ -88,7 +70,10 @@ def drinks_details(payload):# <-- must take 1 postional args
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
-
+@app.route('/drinks/<_id>', methods=['PATCH'])
+@requires_auth('patch:drinks')
+def update_drinks(payload, _id):
+    return jsonify({ 'success': True, 'drinks': [drinks.long() for drinks in Drink.query.all()] }), 200
 
 '''
 @TODO implement endpoint
@@ -100,6 +85,10 @@ def drinks_details(payload):# <-- must take 1 postional args
     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
         or appropriate status code indicating reason for failure
 '''
+@app.route('/drinks/<_id>', methods=['DELETE'])
+@requires_auth('delete:drinks')
+def delete_drinks(payload, _id):
+    return jsonify({ 'success': True, 'drinks': 0 }), 200
 
 
 # Error Handling
