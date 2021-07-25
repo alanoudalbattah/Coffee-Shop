@@ -21,14 +21,14 @@ db_drop_and_create_all()
 
 # ROUTES
 '''
-@TODO implement endpoint
+✅@TODO implement endpoint
     GET /drinks
         it should be a public endpoint
         it should contain only the drink.short() data representation
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
-@app.route('/')
+@app.route('/drinks', methods=['GET'])
 def drinks():
     try:
         return jsonify({
@@ -36,8 +36,19 @@ def drinks():
         'drinks': [drinks.short() for drinks in Drink.query.all()]
         }), 200
     except:
-        abort(422)
+        # dose 422 ever occur here?
+        #  i decided to not handle this error here because the semanticlly
+        #  wrong request comming from the client whould not matter
 
+        # if the request is sentactily wrong 400 whould be thrown 
+        # automaticlly no need to handle it 
+
+        # the only error i can think of here is 404 in case the db dosent
+        # have any records which should never happen
+        if not Drink.query.all():
+            abort(404)
+
+        # else 500 for db error  
 
 '''
 @TODO implement endpoint
@@ -47,7 +58,13 @@ def drinks():
     returns status code 200 and json {"success": True, "drinks": drinks} where drinks is the list of drinks
         or appropriate status code indicating reason for failure
 '''
-        #raise AuthError({'message':'something'}, 403)
+@app.route('/drinks-detail', methods=['GET'])
+@requires_auth('get:drinks-detail')
+def drinks_details(payload):# <-- must take 1 postional args
+        return jsonify({
+        'success': True,
+        'drinks': [drinks.long() for drinks in Drink.query.all()]
+        }), 200
 
 '''
 @TODO implement endpoint
@@ -98,7 +115,7 @@ def unprocessable(error):
     }), 422
 
 '''
-✅@TODO implement error handlers using the @app.errorhandler(error) decorator
+@TODO implement error handlers using the @app.errorhandler(error) decorator
     each error handler should return (with approprate messages):
              jsonify({
                     "success": False,
@@ -128,7 +145,7 @@ def unprocessable(err):
     return jsonify({
         "success": False,
         "error": err.status_code,
-        "message": err.error.get('message'),
+        "message": err.error.get('description'),
     }), err.status_code
 
 #src: https://auth0.com/docs/quickstart/backend/python/01-authorization
