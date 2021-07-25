@@ -46,7 +46,7 @@ def drinks_details(payload):# <-- must take 1 postional args
     return jsonify({ 'success': True, 'drinks': [drinks.long() for drinks in Drink.query.all()] }), 200
 
 '''
-@TODO implement endpoint
+✅@TODO implement endpoint
     POST /drinks
         it should create a new row in the drinks table
         it should require the 'post:drinks' permission
@@ -57,7 +57,9 @@ def drinks_details(payload):# <-- must take 1 postional args
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
 def create_drinks(payload):
-    return jsonify({ 'success': True, 'drinks': [drinks.long() for drinks in Drink.query.all()] }), 200
+    new_drink = Drink( title=request.get_json()['title'] , recipe=json.dumps(request.get_json()['recipe'])) #? (json.dumps) serialize object to JSON formatted string
+    new_drink.insert()
+    return jsonify({ 'success': True, 'drinks': [new_drink.long()] }), 200
 
 '''
 @TODO implement endpoint
@@ -70,13 +72,13 @@ def create_drinks(payload):
     returns status code 200 and json {"success": True, "drinks": drink} where drink an array containing only the updated drink
         or appropriate status code indicating reason for failure
 '''
-@app.route('/drinks/<_id>', methods=['PATCH'])
+@app.route('/drinks/<int:_id>', methods=['PATCH'])
 @requires_auth('patch:drinks')
 def update_drinks(payload, _id):
     return jsonify({ 'success': True, 'drinks': [drinks.long() for drinks in Drink.query.all()] }), 200
 
 '''
-@TODO implement endpoint
+✅@TODO implement endpoint
     DELETE /drinks/<id>
         where <id> is the existing model id
         it should respond with a 404 error if <id> is not found
@@ -85,7 +87,7 @@ def update_drinks(payload, _id):
     returns status code 200 and json {"success": True, "delete": id} where id is the id of the deleted record
         or appropriate status code indicating reason for failure
 '''
-@app.route('/drinks/<_id>', methods=['DELETE'])
+@app.route('/drinks/<int:_id>', methods=['DELETE'])
 @requires_auth('delete:drinks')
 def delete_drinks(payload, _id):
     # delete the resourse using the delete mothod in models.py and if the resourse is not found throw a 404 error ...
