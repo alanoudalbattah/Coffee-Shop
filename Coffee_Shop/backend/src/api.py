@@ -82,7 +82,7 @@ def create_drinks(payload):
 
     try:
         new_drink.insert()
-    except Drink.CreatedError:
+    except:
         # Title not unique
         abort(400, description='title must be unique')
         # using custom abort message
@@ -120,7 +120,7 @@ def update_drinks(payload, _id):
 
     try:
         updated_drink.update()
-    except Drink.UpdateError:
+    except:
         # in case title is not unique
         abort(400, description='title must be unique')
 
