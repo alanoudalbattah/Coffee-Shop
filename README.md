@@ -14,7 +14,13 @@ You can follow instructions specified in:
 1. [`./Coffee_Shop/backend/`](./Coffee_Shop/backend/README.md)
 2. [`./Coffee_Shop/frontend/`](./Coffee_Shop/frontend/README.md)
 
-# API Endpoints 
+# Backend
+[`./Coffee_Shop/backend/src/api.py`](./Coffee_Shop/backend/src/auth.py)
+and
+[`./Coffee_Shop/backend/src/auth/auth.py`](./Coffee_Shop/backend/src/auth.py)
+files has been modified
+
+## API Endpoints 
 The following endpoints are implemented:
 * `GET /drinks`
 * `GET /drinks-detail`
@@ -148,10 +154,11 @@ DELETE /drinks/<id>
 }
 ```
 
-# Postman collection Integeration Test
+## 
+## Postman collection Integeration Test
 Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`
-
-### 2 users are registerd:
+## RBAC permission claims
+#### 2 users are registerd:
 * Barista
   - `can get:drinks-detail`
 
@@ -163,11 +170,11 @@ Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte
   - can `delete:drinks`
 
 
-#### Example of Encoded JWT for Barista:
+##### Example of Encoded JWT for Barista:
  ```
  eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjkydjQ2dGg2Z1JGUUVjN2swQWZHdCJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtY2xhc3MudXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwZmUwYzUxMzU4MmJjMDA2OTQ2MjJkZCIsImF1ZCI6ImRldiIsImlhdCI6MTYyNzI3MDg3NCwiZXhwIjoxNjI3Mjc4MDc0LCJhenAiOiJrQzZYdHFMRklwUXhRcTVzbkdpcWJLVU5FRUVHa2dUQSIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZ2V0OmRyaW5rcy1kZXRhaWwiXX0.Y-huiE1XK1hJIAG7bczI4FKX49TEwNpe5sCii8ZupdyFnh2na5hJN7nXRIav5rcoGOBPl5mNV8gBryawdBHf8I8x9C0yQLGKnJeP9sOJ0DUCRnZdvZjGiUzEVw2S1rjaqpHEUtgb8ASAijrUYsOlHJd4Sj3d8kBJnZGkckOhh3T8Rrf6D8lwvfLJeKrNIQpxXlkZE6BJ72hTuH1UlRx-d4pwGFVkxacnhCw3LUJzXA-t4W_5PkkNabqxhwG4k3m0SHMdVTVL9SOx1Am5ueZK0gNs9zxQZ_ecTME69BaSregXkl88e9nPdvnurcF82SMqkkvXrJtx3JuU_LWLMpsduw
  ```
-#### Example of Decoded JWT for Barista Payload Data:
+##### Example of Decoded JWT for Barista Payload Data:
 ```
 {
   "iss": "https://fsnd-class.us.auth0.com/",
@@ -182,12 +189,12 @@ Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte
   ]
 }
  ```
- #### Example of Encoded JWT for Manager:
+ ##### Example of Encoded JWT for Manager:
  ```
  eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjkydjQ2dGg2Z1JGUUVjN2swQWZHdCJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtY2xhc3MudXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwZmUwYmZhMGY4NjY0MDA2OTJhZGJhYyIsImF1ZCI6ImRldiIsImlhdCI6MTYyNzI2MzMwMiwiZXhwIjoxNjI3MjcwNTAyLCJhenAiOiJrQzZYdHFMRklwUXhRcTVzbkdpcWJLVU5FRUVHa2dUQSIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOmRyaW5rcyIsImdldDpkcmlua3MtZGV0YWlsIiwicGF0Y2g6ZHJpbmtzIiwicG9zdDpkcmlua3MiXX0.Pyn3yywmyh0updSOzYMTPLjJpjWj-dkA3jTjhnw4VWPymwqI3mBgrBt0Z-rF59R-AmDqLAKHEThoFYHrRnA_eeB3j94v52PaDKyomAsevpZvk97PjwN2vIqBq7LanSz_Cs8fIcjw5m8D7JpgboC0fsJjn3Ch0CTq8Qe8ZWZY1hDxfUJw70MoNO_Cp8Hz4Np_cVuaG_fWe1Hrn0iV6AciqSZehaqr8DvE-_9gpV3D_o2myza6u6KrKJQjxk3WZP4QOvsDlhWj223l8-Kl1MTANq8BvXsOnPjSOFfbejEfu3YlsAeEzqFbhvMHinZ_wm0Uz8bt5Dx6hVHF6LLptDja1A
  ```
  
- #### Example of Decoded JWT for Manager Payload Data:
+ ##### Example of Decoded JWT for Manager Payload Data:
  ```
  {
   "iss": "https://fsnd-class.us.auth0.com/",
@@ -205,3 +212,20 @@ Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte
   ]
 }
  ```
+# Frontend
+
+The frontend has been configured with Auth0 variables and backend configuration
+[`./Coffee_Shop/frontend/src/environment/environment.ts`](./Coffee_Shop/frontend/src/environment/environment.ts) file has been modified
+
+```
+export const environment = {
+  production: false,
+  apiServerUrl: 'http://127.0.0.1:5000', 
+  auth0: {
+    url: 'fsnd-class.us', 
+    audience: 'dev', 
+    clientId: 'kC6XtqLFIpQxQq5snGiqbKUNEEEGkgTA',
+    callbackURL: 'http://localhost:8100', 
+  }
+};
+```
