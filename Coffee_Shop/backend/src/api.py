@@ -92,10 +92,10 @@ def update_drinks(payload, _id):
 
     updated_drink = Drink.query.get_or_404(_id)
 
+    # fetch values from request body 
     title = request.get_json()['title']
-    recipe = request.get_json()['recipe'] # fetch values from request body 
-
-    
+    recipe = request.get_json()['recipe'] 
+ 
     if type(recipe) != type([]): # in case recipe is not an array
          abort(400,  description='recipe must be an array')
 
@@ -139,7 +139,7 @@ def unprocessable(err):
     }), 422
 
 '''
-@TODO implement error handlers using the @app.errorhandler(error) decorator
+✅@TODO implement error handlers using the @app.errorhandler(error) decorator
     each error handler should return (with approprate messages):
              jsonify({
                     "success": False,
@@ -148,6 +148,14 @@ def unprocessable(err):
                     }), 404
 
 '''
+@app.errorhandler(400)
+def unprocessable(err):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": err.description
+    }), 400
+
 '''
 ✅@TODO implement error handler for 404
     error handler should conform to general task above
@@ -160,14 +168,6 @@ def unprocessable(err):
         "message": err.description
     }), 404
 
-@app.errorhandler(400)
-def unprocessable(err):
-    return jsonify({
-        "success": False,
-        "error": 400,
-        "message": err.description
-    }), 400
-
 '''
 ✅@TODO implement error handler for AuthError
     error handler should conform to general task above
@@ -179,5 +179,4 @@ def unprocessable(err):
         "error": err.status_code,
         "message": err.error.get('description'),
     }), err.status_code
-
-#src: https://auth0.com/docs/quickstart/backend/python/01-authorization
+    #src: https://auth0.com/docs/quickstart/backend/python/01-authorization
