@@ -254,7 +254,7 @@ Import [postman](https://www.postman.com/) collection [`./starter_code/backend/u
 Running collection using [Newman](https://learning.postman.com/docs/running-collections/using-newman-cli/command-line-integration-with-newman/)
 
 <p align = "center">
-<img src = "https://user-images.githubusercontent.com/72150188/126936310-9e42a36d-b5d0-4e7c-82ae-eba0652b77f8.png" height=400 weight=400>
+<img src = "https://user-images.githubusercontent.com/72150188/126937502-b372d9ae-74ce-45cf-b6a8-17f8e5bc9f4c.png">
 </p>
 <p align = "center">
 Fig.1 - Collection results using Newman CLI
