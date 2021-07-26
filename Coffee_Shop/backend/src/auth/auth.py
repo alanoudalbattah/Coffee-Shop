@@ -9,18 +9,20 @@ AUTH0_DOMAIN = 'fsnd-class.us.auth0.com'
 ALGORITHMS = ['RS256']
 API_AUDIENCE = 'dev'
 
-## AuthError Exception
+# AuthError Exception
 '''
 AuthError Exception
 A standardized way to communicate auth failure modes
 '''
+
+
 class AuthError(Exception):
     def __init__(self, error, status_code):
         self.error = error
         self.status_code = status_code
 
+# Auth Header
 
-## Auth Header
 
 '''
 ✅@TODO implement get_token_auth_header() method
@@ -30,27 +32,34 @@ class AuthError(Exception):
         it should raise an AuthError if the header is malformed
     return the token part of the header
 '''
+
+
 def get_token_auth_header():
 
-    #* attempt to get the header from the request
+    # #* attempt to get the header from the request
     auth_header = request.headers.get('Authorization', None)
 
-    #* raise an AuthError if no header is present
+    # #* raise an AuthError if no header is present
     if not auth_header:
         raise AuthError({'description': 'Authorization header not found'}, 401)
 
-    #* attempt to split bearer and the token
+    # #* attempt to split bearer and the token
     auth_header_parts = auth_header.split()
 
-    #* raise an AuthError if the header is malformed
+    # #* raise an AuthError if the header is malformed
     if auth_header_parts[0].lower() != 'bearer':
-        raise AuthError({'description': 'Authorization header must start with "Bearer"'}, 401)
+        raise AuthError({
+            'description': 'Authorization header must start with "Bearer"'
+            }, 401)
 
     elif len(auth_header_parts) != 2:
-        raise AuthError({'description': 'Authorization header format is invalid'}, 401)
+        raise AuthError({
+            'description': 'Authorization header format is invalid'
+            }, 401)
 
-    #* return the token part of the header
-    return auth_header_parts[1] 
+    # #* return the token part of the header
+    return auth_header_parts[1]
+
 
 '''
 ✅@TODO implement check_permissions(permission, payload) method
@@ -60,15 +69,19 @@ def get_token_auth_header():
 
     it should raise an AuthError if permissions are not included in the payload
         !!NOTE check your RBAC settings in Auth0
-    it should raise an AuthError if the requested permission string is not in the payload permissions array
+    it should raise an AuthError if the requested permission
+     string is not in the payload permissions array
     return true otherwise
 '''
+
+
 def check_permissions(permission, payload):
-    #* raise an AuthError if permissions are not included in the payload
+    # #* raise an AuthError if permissions are not included in the payload
     if 'permissions' not in payload:
         raise AuthError({'description': 'Permissions not found in JWT'}, 400)
 
-    #* raise an AuthError if the requested permission string is not in the payload permissions array
+    # #* raise an AuthError if the requested permission
+    # #* string is not in the payload permissions array
     if permission not in payload['permissions']:
         raise AuthError({'description': 'Permission not found'}, 403)
     return True
@@ -85,9 +98,12 @@ def check_permissions(permission, payload):
     it should validate the claims
     return the decoded payload
 
-    !!NOTE urlopen has a common certificate error described here: https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
+    !!NOTE urlopen has a common certificate error described here:
+    https://stackoverflow.com/questions/50236117/scraping-ssl-certificate-verify-failed-error-for-http-en-wikipedia-org
 '''
-#src : https://github.com/udacity/FSND/blob/master/BasicFlaskAuth
+# src : https://github.com/udacity/FSND/blob/master/BasicFlaskAuth
+
+
 def verify_decode_jwt(token):
     jsonurl = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(jsonurl.read())
@@ -129,7 +145,8 @@ def verify_decode_jwt(token):
         except jwt.JWTClaimsError:
             raise AuthError({
                 'code': 'invalid_claims',
-                'description': 'Incorrect claims. Please, check the audience and issuer.'
+                'description': 'Incorrect claims.'
+                + 'Please, check the audience and issuer.'
             }, 401)
         except Exception:
             raise AuthError({
@@ -141,6 +158,7 @@ def verify_decode_jwt(token):
                 'description': 'Unable to find the appropriate key.'
             }, 400)
 
+
 '''
 ✅@TODO implement @requires_auth(permission) decorator method
     @INPUTS
@@ -148,9 +166,13 @@ def verify_decode_jwt(token):
 
     it should use the get_token_auth_header method to get the token
     it should use the verify_decode_jwt method to decode the jwt
-    it should use the check_permissions method validate claims and check the requested permission
-    return the decorator which passes the decoded payload to the decorated method
+    it should use the check_permissions method validate claims
+        and check the requested permission
+    return the decorator which passes the decoded
+        payload to the decorated method
 '''
+
+
 def requires_auth(permission=''):
     def requires_auth_decorator(f):
         @wraps(f)
