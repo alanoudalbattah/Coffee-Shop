@@ -251,3 +251,11 @@ export const environment = {
 ```
 ## Postman Collection Integeration Test
 Import [postman](https://www.postman.com/) collection [`./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`](./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`)
+Running collection using [Newman](https://learning.postman.com/docs/running-collections/using-newman-cli/command-line-integration-with-newman/)
+
+<p align = "center">
+<img src = "https://user-images.githubusercontent.com/72150188/126936310-9e42a36d-b5d0-4e7c-82ae-eba0652b77f8.png" height=400 weight=400>
+</p>
+<p align = "center">
+Fig.1 - Collection results using Newman CLI
+</p>
