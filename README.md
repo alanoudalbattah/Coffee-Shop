@@ -180,6 +180,7 @@ Raise an error if:
 ## RBAC permission claims
 #### Two users are registerd:
 * Barista
+  - can `get:drinks`
   - can `get:drinks-detail`
 
 * Manager
@@ -249,5 +250,13 @@ export const environment = {
   }
 };
 ```
-## Postman Collection Integeration Test
+# Postman Collection Integeration Test
 Import [postman](https://www.postman.com/) collection [`./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`](./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`)
+Running collection using [Newman](https://learning.postman.com/docs/running-collections/using-newman-cli/command-line-integration-with-newman/)
+
+<p align = "center">
+<img src = "https://user-images.githubusercontent.com/72150188/126937502-b372d9ae-74ce-45cf-b6a8-17f8e5bc9f4c.png">
+</p>
+<p align = "center">
+Fig.1 - Collection results using Newman CLI
+</p>
