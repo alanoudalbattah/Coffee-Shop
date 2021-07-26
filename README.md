@@ -180,6 +180,7 @@ Raise an error if:
 ## RBAC permission claims
 #### Two users are registerd:
 * Barista
+  - can `get:drinks`
   - can `get:drinks-detail`
 
 * Manager
