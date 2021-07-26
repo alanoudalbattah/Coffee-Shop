@@ -57,21 +57,16 @@ def drinks_details(payload):# <-- must take 1 postional args
 '''
 @app.route('/drinks', methods=['POST'])
 @requires_auth('post:drinks')
-def create_drinks(payload):   
-    title = request.get_json()['title']
-    recipe = request.get_json()['recipe'] # fetch values from request body 
+def create_drinks(payload):
 
-    if type(recipe) != type([]): # in case recipe is not an array
-        abort(400,  description='recipe must be an array')
-        # using custom abort message src: https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/
-        
-    new_drink = Drink( title=title , recipe=json.dumps(recipe)) #? (json.dumps) serialize object to JSON formatted string
+    new_drink = Drink( title=request.get_json().get('title') , recipe=json.dumps([request.get_json().get('recipe')]) ) #? (json.dumps) serialize object to JSON formatted string
     
     try:
         new_drink.insert()
     except:
-        # since we already checked recipe the only possible error left is title not unique
+        # Title not unique
         abort(400, description='title must be unique')
+        # using custom abort message src: https://flask.palletsprojects.com/en/1.1.x/patterns/errorpages/
     
     return jsonify({ 'success': True, 'drinks': [new_drink.long()] }), 200
 
@@ -92,15 +87,9 @@ def update_drinks(payload, _id):
 
     updated_drink = Drink.query.get_or_404(_id)
 
-    # fetch values from request body 
-    title = request.get_json()['title']
-    recipe = request.get_json()['recipe'] 
- 
-    if type(recipe) != type([]): # in case recipe is not an array
-         abort(400,  description='recipe must be an array')
-
-    updated_drink.title = title 
-    updated_drink.recipe = json.dumps(recipe)
+    if 'title' in request.get_json(): updated_drink.title = request.get_json().get('title') 
+    else: abort(400, description='title is required') # in case title is empty
+    if 'recipe' in request.get_json(): updated_drink.recipe = [json.dumps(request.get_json().get('recipe'))]
     
     try:
         updated_drink.update()
