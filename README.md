@@ -166,13 +166,21 @@ ALGORITHMS = ['RS256']
 API_AUDIENCE = 'dev'
 ```
 
-## Postman collection Integeration Test
-Import [postman](https://www.postman.com/) collection [`./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`](./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`)
+## The `@requres_auth` Decorator
+A custom @requires_auth decorator is completed in [`./Coffee_Shop/backend/src/auth/auth.py`](./Coffee_Shop/backend/src/auth/auth.py)
+##### Get the Authorization header from the request.
+##### Take an argument to describe the action (i.e., @require_auth(‘create:drink’).
+##### Decode and verify the JWT using the Auth0 secret.
+Raise an error if:
+- The token is expired.
+- The claims are invalid.
+- The token is invalid.
+- The JWT doesn’t contain the proper action (i.e. create: drink).
 
 ## RBAC permission claims
 #### Two users are registerd:
 * Barista
-  - `can get:drinks-detail`
+  - can `get:drinks-detail`
 
 * Manager
   - can `get:drinks`
@@ -182,11 +190,11 @@ Import [postman](https://www.postman.com/) collection [`./starter_code/backend/u
   - can `delete:drinks`
 
 
-##### Example of Encoded JWT for Barista:
+##### Example of Encoded access JWT for Barista:
  ```
  eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjkydjQ2dGg2Z1JGUUVjN2swQWZHdCJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtY2xhc3MudXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwZmUwYzUxMzU4MmJjMDA2OTQ2MjJkZCIsImF1ZCI6ImRldiIsImlhdCI6MTYyNzI3MDg3NCwiZXhwIjoxNjI3Mjc4MDc0LCJhenAiOiJrQzZYdHFMRklwUXhRcTVzbkdpcWJLVU5FRUVHa2dUQSIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZ2V0OmRyaW5rcy1kZXRhaWwiXX0.Y-huiE1XK1hJIAG7bczI4FKX49TEwNpe5sCii8ZupdyFnh2na5hJN7nXRIav5rcoGOBPl5mNV8gBryawdBHf8I8x9C0yQLGKnJeP9sOJ0DUCRnZdvZjGiUzEVw2S1rjaqpHEUtgb8ASAijrUYsOlHJd4Sj3d8kBJnZGkckOhh3T8Rrf6D8lwvfLJeKrNIQpxXlkZE6BJ72hTuH1UlRx-d4pwGFVkxacnhCw3LUJzXA-t4W_5PkkNabqxhwG4k3m0SHMdVTVL9SOx1Am5ueZK0gNs9zxQZ_ecTME69BaSregXkl88e9nPdvnurcF82SMqkkvXrJtx3JuU_LWLMpsduw
  ```
-##### Example of Decoded JWT for Barista Payload Data:
+##### Example of Decoded access JWT for Barista Payload Data:
 ```
 {
   "iss": "https://fsnd-class.us.auth0.com/",
@@ -201,12 +209,12 @@ Import [postman](https://www.postman.com/) collection [`./starter_code/backend/u
   ]
 }
  ```
- ##### Example of Encoded JWT for Manager:
+ ##### Example of Encoded access JWT for Manager:
  ```
  eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IjkydjQ2dGg2Z1JGUUVjN2swQWZHdCJ9.eyJpc3MiOiJodHRwczovL2ZzbmQtY2xhc3MudXMuYXV0aDAuY29tLyIsInN1YiI6ImF1dGgwfDYwZmUwYmZhMGY4NjY0MDA2OTJhZGJhYyIsImF1ZCI6ImRldiIsImlhdCI6MTYyNzI2MzMwMiwiZXhwIjoxNjI3MjcwNTAyLCJhenAiOiJrQzZYdHFMRklwUXhRcTVzbkdpcWJLVU5FRUVHa2dUQSIsInNjb3BlIjoiIiwicGVybWlzc2lvbnMiOlsiZGVsZXRlOmRyaW5rcyIsImdldDpkcmlua3MtZGV0YWlsIiwicGF0Y2g6ZHJpbmtzIiwicG9zdDpkcmlua3MiXX0.Pyn3yywmyh0updSOzYMTPLjJpjWj-dkA3jTjhnw4VWPymwqI3mBgrBt0Z-rF59R-AmDqLAKHEThoFYHrRnA_eeB3j94v52PaDKyomAsevpZvk97PjwN2vIqBq7LanSz_Cs8fIcjw5m8D7JpgboC0fsJjn3Ch0CTq8Qe8ZWZY1hDxfUJw70MoNO_Cp8Hz4Np_cVuaG_fWe1Hrn0iV6AciqSZehaqr8DvE-_9gpV3D_o2myza6u6KrKJQjxk3WZP4QOvsDlhWj223l8-Kl1MTANq8BvXsOnPjSOFfbejEfu3YlsAeEzqFbhvMHinZ_wm0Uz8bt5Dx6hVHF6LLptDja1A
  ```
  
- ##### Example of Decoded JWT for Manager Payload Data:
+ ##### Example of Decoded access JWT for Manager Payload Data:
  ```
  {
   "iss": "https://fsnd-class.us.auth0.com/",
@@ -241,3 +249,5 @@ export const environment = {
   }
 };
 ```
+## Postman Collection Integeration Test
+Import [postman](https://www.postman.com/) collection [`./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`](./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`)
