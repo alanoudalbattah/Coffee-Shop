@@ -21,12 +21,14 @@ and
 files has been modified
 
 ## API Endpoints 
-The following endpoints are implemented:
+The following endpoints are implemented and they perform CRUD methods on the SQLite database:
 * `GET /drinks`
 * `GET /drinks-detail`
 * `POST /drinks`
 * `PATCH /drinks/<id>`
 * `DELETE /drinks/<id>`
+
+
 
 ```
 GET /drinks
@@ -115,7 +117,7 @@ PATCH /drinks/<id>
 - Updates: the corresponding row for <id>
 - Request Arguments: paylod, body and id 
 - Example: 
-URL: {{host}}/drinks/1
+URL: /drinks/1
 Body: 
 {
     "title": "Water5"
@@ -145,7 +147,7 @@ DELETE /drinks/<id>
 - Require the 'delete:drinks' permission
 - Deletes: the corresponding row for <id>
 - Request Arguments: paylod and id 
-- Example: {{host}}/drinks/2
+- Example: /drinks/2
 - Returns: status code 200 and json
 - Example:
 {
@@ -154,11 +156,21 @@ DELETE /drinks/<id>
 }
 ```
 
-## 
+## Secure a REST API using Auth0
+The third-party authentication system [Auth0](https://auth0.com/) is used
+
+All required configuration settings are included in the [`./Coffee_Shop/backend/src/api.py`](./Coffee_Shop/backend/src/auth.py)
+```
+AUTH0_DOMAIN = 'fsnd-class.us.auth0.com'
+ALGORITHMS = ['RS256']
+API_AUDIENCE = 'dev'
+```
+
 ## Postman collection Integeration Test
-Import the postman collection `./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`
+Import [postman](https://www.postman.com/) collection [`./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`](./starter_code/backend/udacity-fsnd-udaspicelatte.postman_collection.json`)
+
 ## RBAC permission claims
-#### 2 users are registerd:
+#### Two users are registerd:
 * Barista
   - `can get:drinks-detail`
 
